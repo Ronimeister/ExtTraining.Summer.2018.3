@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,7 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database classes\DbConnection.cs" />
+    <Compile Include="Database classes\IDbInsertable.cs" />
+    <Compile Include="Database classes\TradeRecordInserter.cs" />
+    <Compile Include="File classes\Parsers\IFileParser.cs" />
+    <Compile Include="File classes\Parsers\TradeFileParser.cs" />
+    <Compile Include="File classes\Readers\IFileReader.cs" />
+    <Compile Include="File classes\Readers\TradeFileReader.cs" />
+    <Compile Include="Handlers\DbHandler.cs" />
+    <Compile Include="Handlers\TradesHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TradeRecord.cs" />
+    <Compile Include="Validation\IDbRecordValidation.cs" />
+    <Compile Include="Validation\TradeRecordValidation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
