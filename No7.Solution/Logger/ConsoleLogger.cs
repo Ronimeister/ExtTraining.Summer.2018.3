@@ -1,7 +1,7 @@
 ﻿using System;
 namespace No7.Solution.Logger
 {
-    class ConsoleLogger : ILogger
+    public class ConsoleLogger : ILogger
     {
         public void Log(string message)
         {

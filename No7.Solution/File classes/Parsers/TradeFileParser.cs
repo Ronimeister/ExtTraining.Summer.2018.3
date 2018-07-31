@@ -16,7 +16,7 @@ namespace No7.Solution
         #endregion
 
         #region Public API
-        public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation)
+        public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation, ILogger logger)
         {
             if (stream == null)
             {
@@ -28,30 +28,10 @@ namespace No7.Solution
                 throw new ArgumentNullException($"{nameof(reader)} can't be equal to null!");
             }
 
-            return ParseInner(stream, reader, validation, DEFAULT_CULTURE, new ConsoleLogger());
+            return ParseInner(stream, reader, validation, DEFAULT_CULTURE, logger);
         }
 
-        public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation, CultureInfo culture)
-        {
-            if (stream == null)
-            {
-                throw new ArgumentNullException($"{nameof(stream)} can't be equal to null!");
-            }
-
-            if (reader == null)
-            {
-                throw new ArgumentNullException($"{nameof(reader)} can't be equal to null!");
-            }
-
-            if (culture == null)
-            {
-                throw new ArgumentNullException($"{nameof(culture)} can't be equal to null!");
-            }
-
-            return ParseInner(stream, reader, validation, culture, new ConsoleLogger());
-        }
-
-        public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation, CultureInfo culture, ILogger logger)
+        public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation, ILogger logger, CultureInfo culture)
         {
             if (stream == null)
             {

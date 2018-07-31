@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using No7.Solution.Logger;
+using System.Reflection;
 
 namespace No7.Solution.Console
 {
@@ -10,7 +11,7 @@ namespace No7.Solution.Console
 
             DbHandler tradeProcessor = new TradesHandler();
 
-            tradeProcessor.Handle(tradeStream, "TradeData");
+            tradeProcessor.Handle(tradeStream, "TradeData", new ConsoleLogger());
         }
     }
 }
