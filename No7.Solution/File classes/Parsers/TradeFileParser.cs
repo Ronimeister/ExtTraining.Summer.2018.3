@@ -1,4 +1,5 @@
 ﻿using No7.Solution.File_classes.Readers;
+using No7.Solution.Logger;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,7 +28,7 @@ namespace No7.Solution
                 throw new ArgumentNullException($"{nameof(reader)} can't be equal to null!");
             }
 
-            return ParseInner(stream, reader, validation, DEFAULT_CULTURE);
+            return ParseInner(stream, reader, validation, DEFAULT_CULTURE, new ConsoleLogger());
         }
 
         public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation, CultureInfo culture)
@@ -47,20 +48,40 @@ namespace No7.Solution
                 throw new ArgumentNullException($"{nameof(culture)} can't be equal to null!");
             }
 
-            return ParseInner(stream, reader, validation, culture);
+            return ParseInner(stream, reader, validation, culture, new ConsoleLogger());
+        }
+
+        public List<TradeRecord> Parse(Stream stream, IFileReader reader, IDbRecordValidation validation, CultureInfo culture, ILogger logger)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException($"{nameof(stream)} can't be equal to null!");
+            }
+
+            if (reader == null)
+            {
+                throw new ArgumentNullException($"{nameof(reader)} can't be equal to null!");
+            }
+
+            if (culture == null)
+            {
+                throw new ArgumentNullException($"{nameof(culture)} can't be equal to null!");
+            }
+
+            return ParseInner(stream, reader, validation, culture, logger);
         }
         #endregion
 
         #region Private methods
-        private List<TradeRecord> ParseInner(Stream stream, IFileReader reader, IDbRecordValidation validation, CultureInfo culture)
+        private List<TradeRecord> ParseInner(Stream stream, IFileReader reader, IDbRecordValidation validation, CultureInfo culture, ILogger logger)
         {
             Thread.CurrentThread.CurrentCulture = culture;
             List<string> lines = reader.ReadFile(stream);
 
-            return GetRecords(lines, validation);
+            return GetRecords(lines, validation, logger);
         }
 
-        private List<TradeRecord> GetRecords(List<string> lines, IDbRecordValidation validation)
+        private List<TradeRecord> GetRecords(List<string> lines, IDbRecordValidation validation, ILogger logger)
         {
             List <TradeRecord> trades = new List<TradeRecord>();
             int lineCount = 1;
@@ -73,12 +94,14 @@ namespace No7.Solution
                 {
                     if (!int.TryParse(fields[1], out var tradeAmount))
                     {
-                        System.Console.WriteLine("WARN: Trade amount on line {0} not a valid integer: '{1}'", lineCount, fields[1]);
+                        string message = string.Format("Trade amount on line {0} not a valid integer: '{1}'", lineCount, fields[1]);
+                        logger.Log(message);
                     }
 
                     if (!decimal.TryParse(fields[2], out var tradePrice))
                     {
-                        System.Console.WriteLine("WARN: Trade price on line {0} not a valid decimal: '{1}'", lineCount, fields[2]);
+                        string message = string.Format("Trade price on line {0} not a valid decimal: '{1}'", lineCount, fields[2]);
+                        logger.Log(message);
                     }
 
                     var sourceCurrencyCode = fields[0].Substring(0, 3);
